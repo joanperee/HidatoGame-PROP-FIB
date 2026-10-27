@@ -1,129 +1,129 @@
 # Hidato Game
 
-A desktop implementation of **Hidato**, the numeric path puzzle, written in Java 21 with a Swing GUI. The player fills a board with consecutive numbers from `1` to the maximum value so that every pair of consecutive numbers sits on adjacent cells.
+Implementació d'escriptori de l'**Hidato**, el trencaclosques numèric de camins, escrita en Java 21 amb interfície gràfica Swing. El jugador omple un tauler amb nombres consecutius des de l'`1` fins al valor màxim, de manera que cada parell de nombres consecutius quedi en cel·les adjacents.
 
-The game supports three board topologies (squares, triangles, hexagons), two adjacency rules, random puzzle generation, a backtracking solver, ranked play with a global leaderboard, hints, saved matches and user-managed puzzle repositories.
+El joc admet tres topologies de tauler (quadrats, triangles, hexàgons), dues regles d'adjacència, generació aleatòria de trencaclosques, un solucionador per backtracking, mode competitiu amb rànquing global, pistes, partides desades i repositoris d'hidatos gestionats per l'usuari.
 
-> Project developed for the **PROP** course (Projectes de Programació, spring 2026, UPC-FIB). Group 12, subgroup 12.4.
+> Projecte desenvolupat per a l'assignatura **PROP** (Projectes de Programació, quadrimestre de primavera 2026, UPC-FIB). Grup 12, subgrup 12.4.
 
-## Table of contents
+## Taula de continguts
 
-1. [Features](#features)
-2. [Requirements](#requirements)
-3. [Quick start](#quick-start)
-4. [How to play](#how-to-play)
-5. [Hidato file format](#hidato-file-format)
-6. [Difficulty and scoring](#difficulty-and-scoring)
-7. [Architecture](#architecture)
-8. [Algorithms](#algorithms)
-9. [Persistence](#persistence)
-10. [Repository layout](#repository-layout)
-11. [Testing](#testing)
-12. [Documentation](#documentation)
-13. [Known limitations](#known-limitations)
-14. [Team](#team)
+1. [Característiques](#característiques)
+2. [Requisits](#requisits)
+3. [Inici ràpid](#inici-ràpid)
+4. [Com jugar](#com-jugar)
+5. [Format de fitxer d'Hidato](#format-de-fitxer-dhidato)
+6. [Dificultat i puntuació](#dificultat-i-puntuació)
+7. [Arquitectura](#arquitectura)
+8. [Algorismes](#algorismes)
+9. [Persistència](#persistència)
+10. [Estructura del repositori](#estructura-del-repositori)
+11. [Proves](#proves)
+12. [Documentació](#documentació)
+13. [Limitacions conegudes](#limitacions-conegudes)
+14. [Equip](#equip)
 
-## Features
+## Característiques
 
-| Area | What it does |
-|------|--------------|
-| Topologies | Squares (`Q`), triangles (`T`), hexagons (`H`) |
-| Adjacency | Sides only (`C`) or sides + vertices (`CA`). Hexagons only support sides. |
-| Generation | Random solvable puzzles from topology, adjacency, difficulty and number of cells (3 to 200) |
-| Solving | Machine solver with solvability check and CPU time report |
-| Validation | Detects unsolvable puzzles and incorrect user solutions |
-| Interactive play | Click-to-fill board, number selector, pause/resume chronometer, hints |
-| Casual mode | Load a stored hidato, resume a saved match, or start a random one |
-| Ranked mode | Random match by difficulty. A correct solution adds score to the global ranking. |
-| Import / create | Paste a hidato in CSV format or load a `.csv` file |
-| Repositories | Create and delete personal lists of hidatos. The shared `all` list is read-only. |
-| Save / load | Save a match (board, elapsed time, hints used) and resume it later |
-| Ranking | Top 100 users by total ranked score |
-| Users | Register and login. Each user has its own score and saved matches. |
+| Àrea | Què fa |
+|------|--------|
+| Topologies | Quadrats (`Q`), triangles (`T`), hexàgons (`H`) |
+| Adjacència | Només costats (`C`) o costats + vèrtexs (`CA`). Els hexàgons només admeten costats. |
+| Generació | Trencaclosques aleatoris resolubles a partir de topologia, adjacència, dificultat i nombre de cel·les (de 3 a 200) |
+| Resolució | Solucionador automàtic amb comprovació de resolubilitat i informe del temps de CPU |
+| Validació | Detecta trencaclosques irresolubles i solucions incorrectes de l'usuari |
+| Joc interactiu | Tauler que s'omple fent clic, selector de nombre, cronòmetre amb pausa/represa, pistes |
+| Mode Casual | Carrega un hidato desat, reprèn una partida desada o comença'n un d'aleatori |
+| Mode Ranked | Partida aleatòria per dificultat. Una solució correcta suma puntuació al rànquing global. |
+| Importar / crear | Enganxa un hidato en format CSV o carrega un fitxer `.csv` |
+| Repositoris | Crea i elimina llistes personals d'hidatos. La llista compartida `all` és de només lectura. |
+| Desar / carregar | Desa una partida (tauler, temps transcorregut, pistes usades) i reprèn-la més tard |
+| Rànquing | Els 100 millors usuaris per puntuació total en mode competitiu |
+| Usuaris | Registre i inici de sessió. Cada usuari té la seva puntuació i les seves partides desades. |
 
-## Requirements
+## Requisits
 
 - **JDK 21**
-- Linux or macOS terminal (the bundled `gradlew` script is used for building)
-- No manual dependency install. Gradle downloads these automatically:
+- Terminal Linux o macOS (el script `gradlew` inclòs s'usa per compilar)
+- Cap instal·lació manual de dependències. Gradle descarrega automàticament:
   - Gson 2.8.9
   - Jackson Databind 2.17.0
-  - JUnit 4.13.1 and Mockito 4.11.0 (test scope)
+  - JUnit 4.13.1 i Mockito 4.11.0 (només per a proves)
 
-## Quick start
+## Inici ràpid
 
 ```bash
-# 1. Extract the project
+# 1. Extreu el projecte
 mkdir ~/hidatogame && tar -xzf ~/Downloads/<filename>.tar.gz -C ~/hidatogame
 
-# 2. Build and run
+# 2. Compila i executa
 cd ~/hidatogame/FONTS
 ./gradlew build && ./gradlew run
 ```
 
-A login window opens. Register a user and log in.
+S'obre una finestra d'inici de sessió. Registra un usuari i inicia sessió.
 
-### Prebuilt jar
+### Jar precompilat
 
 ```bash
 cd EXE
 java -jar hidatoGame.jar
 ```
 
-Run it from the `EXE` directory. The app reads and writes the relative `data/` folder (see [Persistence](#persistence)). If the jar fails on your system, use the Gradle command above.
+Executa'l des del directori `EXE`. L'aplicació llegeix i escriu la carpeta relativa `data/` (vegeu [Persistència](#persistència)). Si el jar falla al teu sistema, usa l'ordre de Gradle anterior.
 
-## How to play
+## Com jugar
 
-After login, the main menu offers six modes plus logout.
+Després d'iniciar sessió, el menú principal ofereix sis modes i el tancament de sessió.
 
-| Menu option | Purpose |
-|-------------|---------|
-| **Play Casual** | Load Hidato (from a list), Load Match (saved game), or Start Solving (new random hidato by difficulty) |
-| **Play Ranked** | Random hidato by difficulty. Solving it correctly adds to your score. |
-| **Generate Hidato** | Choose topology, adjacency, difficulty and number of cells, then play the result |
-| **Create/Import Hidato** | Paste CSV text or select a file, then press *Play Hidato* |
-| **View Ranking** | Top 100 users by score |
-| **Consult Lists** | Manage hidato repositories and play from them |
+| Opció del menú | Finalitat |
+|----------------|-----------|
+| **Play Casual** | Load Hidato (d'una llista), Load Match (partida desada) o Start Solving (hidato aleatori nou per dificultat) |
+| **Play Ranked** | Hidato aleatori per dificultat. Si el resols correctament, sumes puntuació. |
+| **Generate Hidato** | Tria topologia, adjacència, dificultat i nombre de cel·les, i juga el resultat |
+| **Create/Import Hidato** | Enganxa text CSV o selecciona un fitxer, i prem *Play Hidato* |
+| **View Ranking** | Els 100 millors usuaris per puntuació |
+| **Consult Lists** | Gestiona repositoris d'hidatos i juga-hi |
 
-### In-game controls
+### Controls dins la partida
 
-- **Start / Pause**: controls the chronometer. The board is hidden while paused.
-- **Number selector (`<` `>`)**: picks the number that the next clicked empty cell will receive.
-- **Click an empty cell**: places the selected number. **Click a filled cell**: clears it.
-- **Hint**: reveals one correct cell. Hint cells are cyan and cannot be edited. Hints are unlimited but reduce ranked score.
-- **Machine Solve**: checks solvability, solves the board and shows CPU time. No score is awarded afterwards.
-- **Save & Exit**: stores the match. A ranked match saved this way can no longer award score.
-- **Back**: returns to the menu.
+- **Start / Pause**: controla el cronòmetre. El tauler s'amaga mentre és en pausa.
+- **Selector de nombre (`<` `>`)**: tria el nombre que rebrà la pròxima cel·la buida clicada.
+- **Clic en una cel·la buida**: hi col·loca el nombre seleccionat. **Clic en una cel·la plena**: l'esborra.
+- **Hint**: revela una cel·la correcta. Les cel·les de pista són cian i no es poden editar. Les pistes són il·limitades però redueixen la puntuació competitiva.
+- **Machine Solve**: comprova la resolubilitat, resol el tauler i mostra el temps de CPU. Després no s'atorga puntuació.
+- **Save & Exit**: desa la partida. Una partida competitiva desada així ja no pot atorgar puntuació.
+- **Back**: torna al menú.
 
-When every path cell is filled, the game reports whether the solution is correct. If it is wrong, the timer keeps running and you can fix it.
+Quan totes les cel·les del camí estan plenes, el joc indica si la solució és correcta. Si és incorrecta, el temporitzador continua i pots corregir-la.
 
-### Timer behaviour
+### Comportament del temporitzador
 
-- Starts automatically: *Load Match* and *Start Solving* (Casual and Ranked).
-- Waits for the Start button: *Load Hidato*, *Consult Lists*, *Generate Hidato*, *Create/Import Hidato*.
+- Comença automàticament: *Load Match* i *Start Solving* (Casual i Ranked).
+- Espera el botó Start: *Load Hidato*, *Consult Lists*, *Generate Hidato*, *Create/Import Hidato*.
 
-## Hidato file format
+## Format de fitxer d'Hidato
 
-CSV, comma separated.
+CSV, separat per comes.
 
-**Line 1** is the header: `cell type, adjacency, rows, columns`
+**La línia 1** és la capçalera: `tipus de cel·la, adjacència, files, columnes`
 
-| Field | Values |
-|-------|--------|
-| Cell type | `Q` square, `T` triangle, `H` hexagon |
-| Adjacency | `C` sides, `CA` sides + vertices |
-| Rows / columns | Integers |
+| Camp | Valors |
+|------|--------|
+| Tipus de cel·la | `Q` quadrat, `T` triangle, `H` hexàgon |
+| Adjacència | `C` costats, `CA` costats + vèrtexs |
+| Files / columnes | Enters |
 
-**Next `rows` lines** hold the cell values:
+**Les `files` línies següents** contenen els valors de les cel·les:
 
-| Symbol | Meaning |
-|--------|---------|
-| integer | Fixed number |
-| `#` | Cell outside the hidato area |
-| `*` | Hole (inaccessible cell) |
-| `?` | Empty cell to fill |
+| Símbol | Significat |
+|--------|------------|
+| enter | Nombre fix |
+| `#` | Cel·la fora de l'àrea de l'hidato |
+| `*` | Forat (cel·la inaccessible) |
+| `?` | Cel·la buida per omplir |
 
-Example (squares, sides + vertices, 5x5):
+Exemple (quadrats, costats + vèrtexs, 5x5):
 
 ```csv
 Q,CA,5,5
@@ -134,114 +134,114 @@ Q,CA,5,5
 #,#,?,#,#
 ```
 
-Layout conventions:
+Convencions de disposició:
 
-- **Squares**: plain matrix.
-- **Hexagons**: vertical hexagons. Even rows are shifted by the apothem.
-- **Triangles**: odd rows start with the base down, even rows with the base up. Pad with all-`#` rows when needed.
+- **Quadrats**: matriu simple.
+- **Hexàgons**: hexàgons verticals. Les files parelles es desplacen la mida de l'apotema.
+- **Triangles**: les files senars comencen amb la base a baix, les parelles amb la base a dalt. Afegeix files tot `#` quan calgui.
 
-The importer rejects malformed files, for example a dimension mismatch such as a declared 5x5 grid that contains 3x4 data.
+L'importador rebutja fitxers mal formats, per exemple una discrepància de dimensions com una graella 5x5 declarada que conté dades 3x4.
 
-## Difficulty and scoring
+## Dificultat i puntuació
 
-Difficulty sets the fraction of path cells hidden by the generator. The first number (`1`) is always kept.
+La dificultat fixa la fracció de cel·les del camí que amaga el generador. El primer nombre (`1`) sempre es manté.
 
-| Difficulty | Empty cells | Start score | Hint penalty | Time penalty |
-|------------|-------------|-------------|--------------|--------------|
-| Easy | about 25% | 1000 | 100 per hint | 1 per second |
-| Medium | about 50% | 2000 | 200 per hint | 2 per second |
-| Hard | about 75% | 3000 | 300 per hint | 3 per second |
+| Dificultat | Cel·les buides | Puntuació inicial | Penalització per pista | Penalització per temps |
+|------------|----------------|-------------------|------------------------|------------------------|
+| Easy | aprox. 25% | 1000 | 100 per pista | 1 per segon |
+| Medium | aprox. 50% | 2000 | 200 per pista | 2 per segon |
+| Hard | aprox. 75% | 3000 | 300 per pista | 3 per segon |
 
-`score = start score - hints x hint penalty - seconds x time penalty`
+`puntuació = puntuació inicial - pistes x penalització per pista - segons x penalització per temps`
 
-Example: Medium, solved in 01:15 with no hints gives `2000 - 0 - 75 x 2 = 1850`.
+Exemple: Medium, resolt en 01:15 sense pistes dona `2000 - 0 - 75 x 2 = 1850`.
 
-Score is awarded only for a correct, fully played ranked match.
+Només s'atorga puntuació en una partida competitiva jugada completament i resolta correctament.
 
-## Architecture
+## Arquitectura
 
-Three-layer architecture. Each layer talks only to the one below through a controller.
+Arquitectura de tres capes. Cada capa només parla amb la de sota a través d'un controlador.
 
 ```
-presentation  (Swing views + PresentationController)
+presentation  (vistes Swing + PresentationController)
       |
-   domain     (DomainController, model, algorithms)
+   domain     (DomainController, model, algorismes)
       |
- persistence  (DataManager interface + JSON implementations)
+ persistence  (interfície DataManager + implementacions JSON)
 ```
 
-### Presentation (`presentation`)
+### Presentació (`presentation`)
 
-- `Main`: entry point.
-- `PresentationController`: bridges views and the domain.
-- Views: `ViewLogin`, `ViewMenu`, `ViewPlayCasual`, `ViewGenerateHidato`, `ViewCreateHidato`, `ViewHidatoSolving`, `ViewConsultList`, `ViewRanking`.
-- `HidatoBoard`: custom component that draws square, triangle and hexagon boards.
+- `Main`: punt d'entrada.
+- `PresentationController`: pont entre les vistes i el domini.
+- Vistes: `ViewLogin`, `ViewMenu`, `ViewPlayCasual`, `ViewGenerateHidato`, `ViewCreateHidato`, `ViewHidatoSolving`, `ViewConsultList`, `ViewRanking`.
+- `HidatoBoard`: component propi que dibuixa taulers de quadrats, triangles i hexàgons.
 
-### Domain (`domain`)
+### Domini (`domain`)
 
 - `domain.controller`
-  - `DomainController`: singleton facade for the presentation layer.
-  - `HidatoController`, `UserController`: hidato and user logic.
+  - `DomainController`: façana singleton per a la capa de presentació.
+  - `HidatoController`, `UserController`: lògica d'hidatos i d'usuaris.
 - `domain.model`
-  - `Hidato` (abstract) with `Square`, `Triangle`, `Hexagon`: each defines its own adjacency geometry.
+  - `Hidato` (abstracta) amb `Square`, `Triangle`, `Hexagon`: cadascuna defineix la seva pròpia geometria d'adjacència.
   - `Cell`, `User`, `GameSession`.
 - `domain.enumeration`: `Adjacency` (`C`, `CA`), `Difficulty` (`EASY`, `MEDIUM`, `HARD`).
-- `domain.controller.solvingAlgorithm`: `SolvingAlgorithm` (abstract) and `Backtraquing`.
-- `domain.controller.generationAlgorithm`: `GenerationAlgorithm` (abstract) and `BasicGenerator`.
+- `domain.controller.solvingAlgorithm`: `SolvingAlgorithm` (abstracta) i `Backtraquing`.
+- `domain.controller.generationAlgorithm`: `GenerationAlgorithm` (abstracta) i `BasicGenerator`.
 
-### Persistence (`persistence`)
+### Persistència (`persistence`)
 
-- `DataManager<T, ID>` and `DataListManager`: storage interfaces.
-- `JsonManager`: generic JSON store.
-- `JsonHidatoManager`, `JsonUserManager`, `JsonGameSessionManager`: concrete stores.
+- `DataManager<T, ID>` i `DataListManager`: interfícies d'emmagatzematge.
+- `JsonManager`: magatzem JSON genèric.
+- `JsonHidatoManager`, `JsonUserManager`, `JsonGameSessionManager`: magatzems concrets.
 
-### Extensibility
+### Extensibilitat
 
-Solvers and generators sit behind abstract classes (`SolvingAlgorithm`, `GenerationAlgorithm`), and storage sits behind interfaces. A new algorithm or a new storage backend is a new subclass or implementation. Existing classes do not change.
+Els solucionadors i generadors estan darrere de classes abstractes (`SolvingAlgorithm`, `GenerationAlgorithm`), i l'emmagatzematge darrere d'interfícies. Un algorisme nou o un backend d'emmagatzematge nou és una subclasse o implementació nova. Les classes existents no canvien.
 
-New topologies follow the same pattern: extend `Hidato` and implement `getAdjacents`.
+Les topologies noves segueixen el mateix patró: estendre `Hidato` i implementar `getAdjacents`.
 
-## Algorithms
+## Algorismes
 
-### Solver (`Backtraquing`)
+### Solucionador (`Backtraquing`)
 
-1. The hidato becomes a graph. Each non-hole cell is a node, and edges come from the topology and adjacency rule.
-2. Pre-filled values are placed into a path array. The solver rejects the puzzle early when:
-   - a value exceeds the number of path cells,
-   - a value appears twice,
-   - the first or last value is missing,
-   - a node has more neighbours than the topology allows,
-   - two consecutive pre-filled values are not adjacent.
-3. Recursive backtracking fills each empty path position from the neighbours of the previous number, and undoes the choice on a dead end.
-4. `hasSolution`, `isSolution` and `solve` share this model. `solve` returns a `GameSession` with the solved board and CPU time, or `null` if unsolvable.
+1. L'hidato es converteix en un graf. Cada cel·la que no és forat és un node, i les arestes surten de la topologia i la regla d'adjacència.
+2. Els valors prefixats es col·loquen en un vector de camí. El solucionador rebutja el trencaclosques d'entrada quan:
+   - un valor supera el nombre de cel·les del camí,
+   - un valor apareix dues vegades,
+   - falta el primer o l'últim valor,
+   - un node té més veïns dels que permet la topologia,
+   - dos valors prefixats consecutius no són adjacents.
+3. El backtracking recursiu omple cada posició buida del camí a partir dels veïns del nombre anterior, i desfà l'elecció davant un carreró sense sortida.
+4. `hasSolution`, `isSolution` i `solve` comparteixen aquest model. `solve` retorna un `GameSession` amb el tauler resolt i el temps de CPU, o `null` si és irresoluble.
 
-### Generator (`BasicGenerator`)
+### Generador (`BasicGenerator`)
 
-1. Start at a random cell with value `1`.
-2. Place `2, 3, ...` on a random free neighbour. The board grows when the walk leaves the current matrix.
-3. Retry up to 30 times and keep the best attempt if the full length is not reached.
-4. `makeSolvable` hides a random set of values (never `1` and never the last value) according to difficulty.
+1. Comença en una cel·la aleatòria amb valor `1`.
+2. Col·loca `2, 3, ...` en un veí lliure aleatori. El tauler creix quan el recorregut surt de la matriu actual.
+3. Reintenta fins a 30 vegades i conserva el millor intent si no s'assoleix la longitud completa.
+4. `makeSolvable` amaga un conjunt aleatori de valors (mai l'`1` ni l'últim valor) segons la dificultat.
 
-Generated hidatos are always solvable by construction. The generator accepts 3 to 200 cells.
+Els hidatos generats són sempre resolubles per construcció. El generador accepta de 3 a 200 cel·les.
 
-## Persistence
+## Persistència
 
-All data is JSON or CSV under a `data/` folder, relative to the working directory.
+Totes les dades són JSON o CSV dins una carpeta `data/`, relativa al directori de treball.
 
-| Path | Content |
-|------|---------|
-| `data/users/<username>.json` | Username, password, total score, saved game sessions |
-| `data/hidato/all/<uuid>.csv` | Hidato in the CSV format above |
-| `data/hidato/lists/<list>.json` | Hidato repositories (arrays of hidato UUIDs). `all.json` is the shared list. |
-| `data/gamesession/all/<uuid>.json` | Saved matches |
+| Ruta | Contingut |
+|------|-----------|
+| `data/users/<username>.json` | Nom d'usuari, contrasenya, puntuació total, partides desades |
+| `data/hidato/all/<uuid>.csv` | Hidato en el format CSV anterior |
+| `data/hidato/lists/<list>.json` | Repositoris d'hidatos (vectors d'UUID d'hidatos). `all.json` és la llista compartida. |
+| `data/gamesession/all/<uuid>.json` | Partides desades |
 
-The `data/` folder is created on first run. Run the app from the same directory each time to keep your data.
+La carpeta `data/` es crea en la primera execució. Executa l'aplicació sempre des del mateix directori per conservar les dades.
 
-## Repository layout
+## Estructura del repositori
 
 ```
 .
-├── FONTS/               Source code and Gradle build
+├── FONTS/               Codi font i compilació Gradle
 │   ├── build.gradle
 │   ├── settings.gradle
 │   ├── gradlew, gradlew.bat
@@ -249,63 +249,63 @@ The `data/` folder is created on first run. Run the app from the same directory 
 │       ├── presentation/
 │       ├── domain/
 │       └── persistence/
-├── EXE/                 Executable jar, sample data and test sets
+├── EXE/                 Jar executable, dades d'exemple i jocs de prova
 │   ├── hidatoGame.jar
 │   ├── data/
 │   └── test_sets/
-├── DOCS/                User manual, classes per member, test documentation
-├── javadoc/             Generated API documentation (open javadoc/index.html)
-├── equip.txt            Team members
-└── index.txt            Directory index
+├── DOCS/                Manual d'usuari, classes per membre, documentació de proves
+├── javadoc/             Documentació de l'API generada (obre javadoc/index.html)
+├── equip.txt            Membres de l'equip
+└── index.txt            Índex de directoris
 ```
 
-## Testing
+## Proves
 
-Manual test sets are in `EXE/test_sets/`, one folder per test of `DOCS/test_sets.pdf`.
+Els jocs de prova manuals són a `EXE/test_sets/`, una carpeta per cada prova de `DOCS/test_sets.pdf`.
 
-| Folder | Covers |
-|--------|--------|
-| `T2.1` / `T2.2` | Solvable / unsolvable hidatos for the machine solver |
-| `T3-T5` | Validation and interactive game, all topologies and adjacencies |
-| `T6` | Timer control (saved sessions and hidatos) |
-| `T7` | Ranking, multiple users |
-| `T8.1`, `T8.5` | Create, save and load game sessions |
-| `T9.1` to `T9.3` | Ranked mode, easy / medium / hard |
-| `T9.4` to `T9.6` | Casual mode, easy / medium / hard |
-| `T9.7` / `T9.8` | Hints on a nearly empty board / a wrongly completed board |
+| Carpeta | Cobreix |
+|---------|---------|
+| `T2.1` / `T2.2` | Hidatos resolubles / irresolubles per al solucionador automàtic |
+| `T3-T5` | Validació i joc interactiu, totes les topologies i adjacències |
+| `T6` | Control del temps (sessions i hidatos desats) |
+| `T7` | Rànquing, diversos usuaris |
+| `T8.1`, `T8.5` | Crear, desar i carregar sessions de joc |
+| `T9.1` a `T9.3` | Mode Ranked, easy / medium / hard |
+| `T9.4` a `T9.6` | Mode Casual, easy / medium / hard |
+| `T9.7` / `T9.8` | Pistes en un tauler gairebé buit / completat incorrectament |
 
-To reproduce a test, load the files through **Create/Import Hidato** (hidatos) or copy them into `data/` (sessions and users). Each folder has a `description.txt`.
+Per reproduir una prova, carrega els fitxers amb **Create/Import Hidato** (hidatos) o copia'ls a `data/` (sessions i usuaris). Cada carpeta té un `description.txt`.
 
-`build.gradle` is configured for JUnit 4 and Mockito, with `../EXE` as the test source directory. Run with:
+`build.gradle` està configurat per a JUnit 4 i Mockito, amb `../EXE` com a directori de codi de proves. Executa amb:
 
 ```bash
 cd FONTS
 ./gradlew test
 ```
 
-## Documentation
+## Documentació
 
-- `DOCS/user_manual.pdf`: full user guide with screenshots and error messages.
-- `DOCS/classes_per_member.pdf`: who implemented each class.
-- `DOCS/test_sets.pdf`: test plan and results.
-- `javadoc/`: API documentation for all packages. Open `javadoc/index.html`.
+- `DOCS/user_manual.pdf`: guia d'usuari completa amb captures i missatges d'error.
+- `DOCS/classes_per_member.pdf`: qui va implementar cada classe.
+- `DOCS/test_sets.pdf`: pla de proves i resultats.
+- `javadoc/`: documentació de l'API de tots els paquets. Obre `javadoc/index.html`.
 
-## Known limitations
+## Limitacions conegudes
 
-- Passwords are stored in plain text in `data/users/*.json`. Do not reuse a real password.
-- The solver is plain backtracking with no pruning heuristics. Large, sparse boards can take long.
-- The generator builds a path by random walk and can stop short of the requested cell count. It keeps the best attempt out of 30.
-- Hexagon boards support sides adjacency only.
-- Unique-solution checking is not implemented. A generated puzzle has at least one solution, not exactly one.
-- Data paths are relative to the working directory. Starting the app from another folder creates a new `data/`.
-- The prebuilt jar is documented for Linux-based systems.
+- Les contrasenyes es desen en text pla a `data/users/*.json`. No hi reutilitzis una contrasenya real.
+- El solucionador és backtracking simple, sense heurístiques de poda. Els taulers grans i poc omplerts poden trigar molt.
+- El generador construeix el camí amb un recorregut aleatori i pot quedar-se curt respecte al nombre de cel·les demanat. Conserva el millor intent de 30.
+- Els taulers d'hexàgons només admeten adjacència per costats.
+- No hi ha comprovació de solució única. Un trencaclosques generat té almenys una solució, no exactament una.
+- Les rutes de dades són relatives al directori de treball. Si inicies l'aplicació des d'una altra carpeta, es crea un `data/` nou.
+- El jar precompilat està documentat per a sistemes basats en Linux.
 
-## Team
+## Equip
 
-Group 12, subgroup 12.4.
+Grup 12, subgrup 12.4.
 
-| Name | Contact |
-|------|---------|
+| Nom | Contacte |
+|-----|----------|
 | Mohamed Aghzaf El Hachimi | mohamed.aghzaf@estudiantat.upc.edu |
 | Félix Cifuentes Salamí | felix.cifuentes@estudiantat.upc.edu |
 | Rafel Miquel Mitjans | rafel.miquel@estudiantat.upc.edu |
