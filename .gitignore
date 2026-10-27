@@ -2,3 +2,18 @@
 .idea
 build
 *.class
+# Gradle
+FONTS/build/
+FONTS/.gradle/
+.gradle/
+build/
+
+# Dades runtime
+FONTS/data/
+EXE/data/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
