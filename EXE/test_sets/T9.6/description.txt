@@ -1,0 +1,3 @@
+/EXE/test_sets/T9.6
+
+Hidatos to test Select Hard difficulty on Casual Mode.

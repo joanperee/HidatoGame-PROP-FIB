@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"domain.controller"},{"l":"domain.controller.generationAlgorithm"},{"l":"domain.controller.solvingAlgorithm"},{"l":"domain.enumeration"},{"l":"domain.model"},{"l":"persistence"},{"l":"presentation.classes"},{"l":"presentation.controller"}];updateSearchResults();

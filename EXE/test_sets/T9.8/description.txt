@@ -1,0 +1,3 @@
+/EXE/test_sets/T9.8
+
+Get Hint with the board wrongly completed

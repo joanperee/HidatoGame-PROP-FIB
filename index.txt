@@ -1,0 +1,19 @@
+PROP, Group 12, subgroup 12.4
+
+
+Project Directories:
+
+/DOCS - Contains the written documentation for the project.
+	- User manual
+	- Classes per member
+	- Testing sets
+
+/EXE - Contains executables and tests.
+	- Compiled project executable
+	- Examples regarding the project test sets 
+
+/FONTS - Contains all the source code. 
+	- Gradle compilation and build files
+	- src/ folder with all the code
+
+/javadoc - Automated documentation on the project classes and methods.

@@ -1,0 +1,4 @@
+/EXE/test_sets/T2.1
+
+This folder contains 8 valid hidatos with different forms to
+check the system solves them appropriately. 

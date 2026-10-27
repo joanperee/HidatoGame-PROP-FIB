@@ -1,0 +1,4 @@
+/EXE/test_sets/T8.1
+
+Tests to create and save GameSessions, and the effects it
+has in the Hidatos and Users created.

@@ -1,0 +1,3 @@
+/EXE/test_sets/T9.3
+
+Tests on Select Hard difficulty on Ranked Mode

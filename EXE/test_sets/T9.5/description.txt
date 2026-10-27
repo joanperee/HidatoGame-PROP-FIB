@@ -1,0 +1,3 @@
+/EXE/test_sets/T9.5
+
+Hidatos to test Select Medium difficulty on Casual Mode.

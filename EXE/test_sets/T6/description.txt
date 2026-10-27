@@ -1,0 +1,8 @@
+/EXE/test_sets/T6
+
+Tests for the Timer Control. This folder contains
+two (2) subdirectories, one for started GameSessions and
+another one containing valid hidatos. Therefore all the functionalities
+that play hidatos (Load Hidato, Load Match) can be checked.
+Also, other functionalities like GenerateHidato do not require
+test files, as the timer can be runtime-checked.

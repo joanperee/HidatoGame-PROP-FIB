@@ -1,0 +1,8 @@
+domain.controller
+domain.controller.generationAlgorithm
+domain.controller.solvingAlgorithm
+domain.enumeration
+domain.model
+persistence
+presentation.classes
+presentation.controller

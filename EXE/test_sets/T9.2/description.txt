@@ -1,0 +1,3 @@
+/EXE/test_sets/T9.2
+
+Hidatos testes to Select Medium difficulty on Ranked Mode

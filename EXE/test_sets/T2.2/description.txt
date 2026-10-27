@@ -1,0 +1,5 @@
+/EXE/test_sets/T2.2
+
+This folder contains 8 invalid hidatos. That is, they are unsolvable, 
+and serve the purpose to check if the system triggers the corresponding
+"This hidato is unsolvable" error.

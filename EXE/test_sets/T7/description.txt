@@ -1,0 +1,7 @@
+/EXE/test_sets/T7
+
+Ranking tests. We have three (3) subdirectories, GameSessions 
+(to load an existing match and check that no score is awarded
+even if it was a ranked one), Hidatos (examples to use) and
+Users (to see the ranking is visible to all of them, and that 
+the score is updated appropriately).

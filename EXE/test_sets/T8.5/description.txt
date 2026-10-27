@@ -1,0 +1,6 @@
+/EXE/test_sets/T8.5
+
+Creating another GameSession test. We only need one user,
+that's why in this case Users subdirectory is not needed.
+We will check that a new GameSession is added to the saved
+data and that its corresponding Hidato is saved too.

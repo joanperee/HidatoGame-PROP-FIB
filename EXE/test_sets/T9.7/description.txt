@@ -1,0 +1,3 @@
+/EXE/test_sets/T9.7
+
+Get hint with the board almost empty.
